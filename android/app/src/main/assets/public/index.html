@@ -288,7 +288,15 @@ svg{ fill:none; stroke:currentColor; stroke-width:1.75; stroke-linecap:round; st
 #tb,#scrim{ display:none; }
 html.nm-rail nav{ top:0; bottom:0; right:auto; width:6.4rem; flex-direction:column; justify-content:flex-start; gap:6px; border-top:0; border-right:1px solid var(--line); padding:calc(18px + var(--sat)) 6px 18px; overflow-y:auto; }
 html.nm-rail nav button{ flex:none; padding:10px 2px; font-size:.75rem; overflow-wrap:anywhere; }
-html.nm-rail main{ margin-left:6.4rem; max-width:none; padding:32px 40px 60px; }
+html.nm-rail main{ margin:0 0 0 6.4rem; width:auto; max-width:none; padding:calc(24px + var(--sat)) 28px 60px; }
+html.nm-rail .wrap{ max-width:900px; }
+@media (max-height:540px){
+  html.nm-rail nav{ width:5.2rem; padding:calc(6px + var(--sat)) 4px calc(6px + var(--sab)); gap:2px; }
+  html.nm-rail main{ margin-left:5.2rem; padding-top:calc(14px + var(--sat)); }
+  html.nm-rail nav button{ padding:4px 2px; font-size:.64rem; gap:0; }
+  html.nm-rail nav .ic{ padding:2px 8px; } html.nm-rail nav .ic .i{ width:1.25rem; height:1.25rem; }
+  html.nm-drawer main{ padding-top:calc(3.6rem + var(--sat)); }
+}
 html.nm-rail #toast{ bottom:30px; }
 html.nm-drawer #tb{ display:flex; position:fixed; top:0; left:0; right:0; z-index:12; align-items:center; gap:10px; background:var(--surface); border-bottom:1px solid var(--line); padding:calc(6px + var(--sat)) 10px 6px; }
 html.nm-drawer #tb .ib{ width:2.6rem; height:2.6rem; }
@@ -511,7 +519,10 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
     <div class="card hint" style="font-size:.9rem">
       <div class="brandbar" id="about-brand" style="margin-bottom:8px"></div><b style="color:var(--ink)">Dosari <span id="app-ver"></span></b><br>
       As densidades são valores médios de tabelas culinárias. Marca, umidade e modo de medir (peneirado, compactado) podem mudar o resultado em alguns por cento. Você pode ajustar qualquer ingrediente em Meus itens.
-      <details style="margin-top:10px"><summary style="cursor:pointer;color:var(--ink);font-weight:600">Novidades da versão 2.5.0</summary><ul style="margin:8px 0 0;padding-left:18px">
+      <details style="margin-top:10px"><summary style="cursor:pointer;color:var(--ink);font-weight:600">Novidades da versão 2.5.1</summary><ul style="margin:8px 0 0;padding-left:18px">
+        <li>Gesto/botão "voltar" do Android agora volta dentro do app (fecha janela, volta uma tela, volta à aba anterior) e só sai no Início</li>
+        <li>Modo paisagem corrigido: conteúdo não ultrapassa mais a tela, menu lateral compacto em telas baixas</li>
+        <li><b>2.5.0:</b> layout adaptativo a zoom/fonte, menu lateral, lista de compras alinhada</li>
         <li><b>Layout adaptativo</b>: o app percebe zoom da tela e fonte ampliada e se reorganiza sozinho (cartões empilhados, botões que quebram linha, nada cortado)</li>
         <li><b>Menu lateral</b> (☰) automático em telas muito ampliadas; opção "Menu de navegação" em Ajustes para escolher barra inferior, menu lateral ou coluna fixa</li>
         <li>Lista de compras reorganizada: quantidades alinhadas em coluna e nomes que quebram linha corretamente</li>
@@ -572,7 +583,7 @@ const key = s=>norm(s).replace(/[-–]/g,' ').replace(/\s+/g,' ').trim();
 const icon = (id,cls='i')=>`<svg class="${cls}"><use href="#${id}"/></svg>`;
 const cap = s=>s.charAt(0).toUpperCase()+s.slice(1);
 
-const APP_VERSION='2.5.0';
+const APP_VERSION='2.5.1';
 const brandMark=(sz=40,uid='b')=>`<svg class="bm" viewBox="0 0 512 512" width="${sz}" height="${sz}" aria-hidden="true"><defs><linearGradient id="bg${uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3F8A5F"/><stop offset="1" stop-color="#2F6B4A"/></linearGradient><clipPath id="bc${uid}"><path d="M196,168 H266 A92,92 0 0 1 266,352 H196 Z"/></clipPath></defs><rect width="512" height="512" rx="116" fill="url(#bg${uid})"/><path d="M168,128 H268 A132,132 0 0 1 268,392 H168 Q152,392 152,376 V144 Q152,128 168,128 Z" fill="#FFF6E6"/><path d="M196,168 H266 A92,92 0 0 1 266,352 H196 Z" fill="#2F6B4A"/><g clip-path="url(#bc${uid})"><path d="M120,286 q32,-18 64,0 t64,0 t64,0 t64,0 V420 H120 Z" fill="#F28C3A"/></g><g stroke="#FFF6E6" stroke-width="10" stroke-linecap="round"><path d="M196,200 h38"/><path d="M196,240 h22"/><path d="M196,320 h22"/></g></svg>`;
 const SLOGAN='A dosagem certa para cada receita';
 
@@ -652,7 +663,7 @@ function adapt(){
   const root=document.documentElement, w=Math.max(200,window.innerWidth||document.documentElement.clientWidth||360);
   const px=(TH.size||16)*textZoom(), em=w/px; ADAPT.em=em;
   const cx=em<17.5?'xs':em<21.5?'sm':'n';
-  let mode=TH.nav; if(mode==='auto') mode=cx==='xs'?'drawer':(em>=50?'rail':'bottom');
+  let mode=TH.nav; if(mode==='auto') mode=cx==='xs'?'drawer':((em>=50||(w>(window.innerHeight||0)*1.3&&em>=26))?'rail':'bottom');
   if(mode==='rail'&&em<26) mode='drawer';
   ADAPT.mode=mode; ADAPT.cx=cx;
   ['xs','sm','n'].forEach(k=>root.classList.toggle('cx-'+k,k===cx));
@@ -1252,8 +1263,16 @@ function openItem(it){ stack.push(it); history.pushState({d:stack.length},''); s
 function closeTop(cb){ if(!stack.length){ if(cb) cb(); return; } pendingCb=cb||null; history.back(); }
 function showTab(id){
   if(stack.length){ pendingCb=()=>{ tab=id; sync(); }; history.go(-stack.length); }
-  else { if(tab===id&&$('#p-'+id).classList.contains('on')){ window.scrollTo({top:0,behavior:'smooth'}); return; } tab=id; sync(); }
+  else { if(tab===id&&$('#p-'+id).classList.contains('on')){ window.scrollTo({top:0,behavior:'smooth'}); return; } if(!BACKING&&tab&&tab!==id) TABH.push(tab); if(TABH.length>20) TABH.shift(); tab=id; sync(); }
 }
+const TABH=[]; let BACKING=false;
+function dosariBack(){
+  if(document.documentElement.classList.contains('dopen')){ setDrawer(false); return true; }
+  if(stack.length){ closeTop(); return true; }
+  if(tab!=='home'){ let t=TABH.pop(); while(t&&t===tab) t=TABH.pop(); BACKING=true; showTab(t||'home'); BACKING=false; return true; }
+  return false;
+}
+window.__dosariBack=()=>{ try{ return dosariBack(); }catch(e){ return false; } };
 window.addEventListener('popstate',e=>{
   const d=(e.state&&typeof e.state.d==='number')?e.state.d:0;
   if(d<stack.length){

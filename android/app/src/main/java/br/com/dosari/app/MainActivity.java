@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
+import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.BridgeActivity;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -31,6 +32,18 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
         collect(getIntent());
         getBridge().getWebView().addJavascriptInterface(new Native(), "DosariNative");
+
+        // Gesto/botão "voltar": primeiro volta dentro do app; só sai (minimiza) se já estiver no Início.
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                getBridge().getWebView().evaluateJavascript(
+                    "(function(){try{return window.__dosariBack?window.__dosariBack():false}catch(e){return false}})()",
+                    value -> {
+                        if (!"true".equals(value)) moveTaskToBack(true);
+                    });
+            }
+        });
     }
 
     @Override
