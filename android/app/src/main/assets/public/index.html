@@ -364,6 +364,19 @@ html.cx-sm .grid2{ grid-template-columns:minmax(0,1fr); }
 h1,h2,.rtitle{ overflow-wrap:anywhere; }
 #sb{ position:fixed; right:2px; top:0; width:4px; height:0; border-radius:4px; background:var(--muted); opacity:0; transition:opacity .3s; pointer-events:none; z-index:70; }
 #sb.on{ opacity:.6; }
+.tmlist{display:grid;gap:10px}
+.tmc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.tmc.done{border-color:var(--danger);box-shadow:0 0 0 2px rgba(214,69,69,.25)}
+.tmh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.tml{display:flex;flex-direction:column;min-width:0}.tml b{overflow-wrap:anywhere}.tml span{color:var(--muted);font-size:.85em;overflow-wrap:anywhere}
+.tmt{font-size:2.1rem;font-weight:700;text-align:center;margin:8px 0 6px;font-variant-numeric:tabular-nums}
+.tmb{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.tmb i{display:block;height:100%;background:var(--accent);transition:width .5s linear}
+.tmd{text-align:center;font-weight:700;color:var(--danger);margin-top:6px}
+.tmx{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.tmx .btn{margin:0;padding:8px 12px;flex:1 1 auto}
+#tm-alert{position:fixed;left:0;right:0;top:0;z-index:9999;padding:10px 12px;max-height:70vh;overflow:auto;display:none;gap:10px;max-width:640px;margin:0 auto}
+#tm-alert.on{display:grid}#tm-alert .tmc{box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.ajs>h2{display:none}
+.nwl details{border-top:1px solid var(--line);padding:8px 0}.nwl summary{cursor:pointer}.nwl ul{margin:6px 0 0;padding-left:18px}.nwl li{margin:3px 0}
 </style>
 </head>
 <body>
@@ -462,20 +475,27 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
   <section class="panel" id="p-itens"></section>
 
   <section class="panel" id="p-aj">
+    <div id="aj-hub">
     <h1><svg class="i hi"><use href="#i-sliders"/></svg>Ajustes</h1>
-
-    <h2><svg class="i sm"><use href="#i-help"/></svg>Ajuda</h2>
-    <div class="card">
-      <button class="lrow" data-act="help" style="padding:0;border:0"><span class="lic"><svg class="i sm"><use href="#i-help"/></svg></span><span class="tx"><span class="tt">Como usar o aplicativo</span><span class="ss">Guia completo de cada função</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="aj-open" data-id="perfil"><span class="lic"><svg class="i sm"><use href="#i-user"/></svg></span><span class="tx"><span class="tt">Perfil</span><span class="ss">Seu nome, apelido e aniversário</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="aj-open" data-id="aparencia"><span class="lic"><svg class="i sm"><use href="#i-palette"/></svg></span><span class="tx"><span class="tt">Aparência</span><span class="ss">Tema, cores, tamanho do texto e menu de navegação</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="aj-open" data-id="timer"><span class="lic"><svg class="i sm"><use href="#i-timer"/></svg></span><span class="tx"><span class="tt">Temporizador</span><span class="ss">Toque, volume, vibração e onde iniciar</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="aj-open" data-id="medidas"><span class="lic"><svg class="i sm"><use href="#i-ruler"/></svg></span><span class="tx"><span class="tt">Tamanho das medidas</span><span class="ss">Xícara, colheres e copo do seu jeito</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="aj-open" data-id="backup"><span class="lic"><svg class="i sm"><use href="#i-db"/></svg></span><span class="tx"><span class="tt">Backup e restauração</span><span class="ss">Exportar, restaurar e importar receitas</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="help"><span class="lic"><svg class="i sm"><use href="#i-help"/></svg></span><span class="tx"><span class="tt">Ajuda</span><span class="ss">Guia completo de cada função do app</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
+    <button class="card hlp" data-act="aj-open" data-id="sobre"><span class="lic"><svg class="i sm"><use href="#i-info"/></svg></span><span class="tx"><span class="tt">Sobre</span><span class="ss">Versão, novidades e observações</span></span><svg class="i sm"><use href="#i-chev"/></svg></button>
     </div>
-
+    <div class="ajs" data-ajs="perfil" style="display:none">
+    <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-user"/></svg>Perfil</h1>
     <h2><svg class="i sm"><use href="#i-user"/></svg>Perfil</h2>
     <div class="card">
       <div id="prof-sum" style="font-weight:600"></div>
       <div class="hint" id="prof-sum2"></div>
       <button class="btn" data-act="profile">Editar perfil</button>
     </div>
-
+    </div>
+    <div class="ajs" data-ajs="aparencia" style="display:none">
+    <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-palette"/></svg>Aparência</h1>
     <h2><svg class="i sm"><use href="#i-palette"/></svg>Aparência</h2>
     <div class="card">
       <div class="lbl" style="margin-bottom:8px">Tema da tela</div>
@@ -507,7 +527,25 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
       <div class="sample">Exemplo: 1 xícara de farinha de trigo ≈ <b>120 g</b></div>
       <button class="btn" id="reset-theme">Restaurar aparência</button>
     </div>
-
+    </div>
+    <div class="ajs" data-ajs="timer" style="display:none">
+    <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-timer"/></svg>Temporizador</h1>
+    <h2><svg class="i sm"><use href="#i-timer"/></svg>Temporizador</h2>
+    <div class="card">
+      <div class="lbl" style="margin-bottom:8px">Toque</div>
+      <div class="seg" id="tm-tone"><button data-act="tm-tone" data-v="classic">Clássico</button><button data-act="tm-tone" data-v="bell">Sino</button><button data-act="tm-tone" data-v="digital">Digital</button><button data-act="tm-tone" data-v="soft">Suave</button></div>
+      <div class="lbl" style="margin:18px 0 8px">Volume do toque: <b id="tm-vol-v">80%</b></div>
+      <input id="tm-vol" type="range" min="0" max="100" step="5" value="80" data-in="tmvol" data-ch="tmvol" style="width:100%" aria-label="Volume do toque">
+      <div class="lbl" style="margin:18px 0 8px">Vibração</div>
+      <div class="seg c3" id="tm-vib"><button data-act="tm-vib" data-v="off">Desligada</button><button data-act="tm-vib" data-v="normal">Normal</button><button data-act="tm-vib" data-v="long">Longa</button></div>
+      <div class="lbl" style="margin:18px 0 8px">Onde iniciar o temporizador</div>
+      <div class="seg c2" id="tm-mode"><button data-act="tm-mode" data-v="app">No Dosari</button><button data-act="tm-mode" data-v="clock">Relógio do celular</button></div>
+      <label class="check" style="margin-top:14px"><input type="checkbox" id="tm-wake" data-ch="tmwake"><span>Manter a tela ligada enquanto houver temporizador ativo (o alarme só toca com o app aberto)</span></label>
+      <button class="btn" data-act="tm-test">Testar toque e vibração</button>
+    </div>
+    </div>
+    <div class="ajs" data-ajs="medidas" style="display:none">
+    <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-ruler"/></svg>Tamanho das medidas</h1>
     <h2><svg class="i sm"><use href="#i-ruler"/></svg>Tamanho das medidas</h2>
     <div class="card">
       <div class="grid2">
@@ -519,7 +557,9 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
       <p class="hint" style="margin-top:12px">A colher de sobremesa é sempre o dobro da colher de chá. As alterações valem na hora e ficam salvas neste aparelho.</p>
       <button class="btn" id="reset" style="margin-top:6px">Restaurar medidas padrão</button>
     </div>
-
+    </div>
+    <div class="ajs" data-ajs="backup" style="display:none">
+    <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-db"/></svg>Backup e restauração</h1>
     <h2><svg class="i sm"><use href="#i-db"/></svg>Backup e importação</h2>
     <div class="card">
       <p class="hint" style="margin:0 0 4px">Seus dados ficam apenas neste aparelho. Faça backups com frequência e guarde o arquivo em um lugar seguro (Google Drive, e-mail, WhatsApp).</p>
@@ -531,58 +571,17 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
       </div>
       <input type="file" id="imp-full" accept="*/*" hidden>
       <input type="file" id="imp-rec" accept="*/*" hidden>
+      <div><button class="btn danger" data-act="wipe" style="margin-top:12px">Apagar todos os dados</button></div>
     </div>
-
+    </div>
+    <div class="ajs" data-ajs="sobre" style="display:none">
+    <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-info"/></svg>Sobre</h1>
     <h2><svg class="i sm"><use href="#i-info"/></svg>Sobre</h2>
     <div class="card hint" style="font-size:.9rem">
       <div class="brandbar" id="about-brand" style="margin-bottom:8px"></div><b style="color:var(--ink)">Dosari <span id="app-ver"></span></b><br>
       As densidades são valores médios de tabelas culinárias. Marca, umidade e modo de medir (peneirado, compactado) podem mudar o resultado em alguns por cento. Você pode ajustar qualquer ingrediente em Meus itens.
-      <details style="margin-top:10px"><summary style="cursor:pointer;color:var(--ink);font-weight:600">Novidades da versão 2.9.2</summary><ul style="margin:8px 0 0;padding-left:18px">
-        <li><b>2.9.2:</b> o temporizador mostra a versão e o diagnóstico da ponte do Relógio</li>
-        <li><b>2.9.1:</b> o temporizador tenta também os apps Relógio da Samsung e do Google e informa o motivo se falhar</li>
-        <li><b>Temporizador</b> na receita: abre o app Relógio do celular já com o tempo ajustado (tempo da receita, tempos citados no preparo ou um valor digitado)</li>
-        <li><b>2.8.0:</b> primeiro acesso com perfil opcional; 182 receitas em camadas e etapas</li>
-        <li><b>Primeiro acesso</b>: o app pergunta se você já usou o Dosari (restaurar backup ou novo perfil) ou se é a primeira vez</li>
-        <li>Dá para <b>pular a criação do perfil</b> por enquanto; o app volta a perguntar a cada abertura e, ao criar o perfil, tudo que você configurou é mantido</li>
-        <li><b>182 receitas do livro</b> agora vêm em camadas e etapas (bolos, tortas, recheios, massas…); receitas que você editou não são alteradas</li>
-        <li><b>2.7.0:</b> receitas em camadas e preparo por etapas</li>
-        <li><b>Receitas em camadas</b>: separe os ingredientes por camada (Massa, Recheio, Cobertura…) com nome editável, reordenar, duplicar e remover</li>
-        <li><b>Preparo por etapas</b>: etapas com título e passos numerados em sequência, também reordenáveis</li>
-        <li>Lista de compras: escolha entre <b>tudo agrupado</b> ou <b>separado por camadas</b></li>
-        <li>Nova receita no livro: Bolo de Chocolate Dark Estruturado (exemplo de receita em camadas); PDF, impressão e compartilhamento respeitam camadas e etapas</li>
-        <li><b>2.6.0:</b> menu Nova, backup no boas-vindas, saudações, cores personalizadas</li>
-        <li>Botão <b>Nova</b> em Receitas abre um menu: Nova receita, Importar receitas e Receber receitas</li>
-        <li>Tela de boas-vindas com opção de <b>restaurar um backup</b> (sem preencher o perfil de novo)</li>
-        <li>Muito mais saudações: dias da semana, fins de semana, feriados, datas especiais e aniversário</li>
-        <li>Cor personalizada por <b>código hexadecimal ou RGB</b>, com as 8 últimas em "Minhas cores"</li>
-        <li><b>2.5.1:</b> botão voltar do Android e modo paisagem</li>
-        <li>Gesto/botão "voltar" do Android agora volta dentro do app (fecha janela, volta uma tela, volta à aba anterior) e só sai no Início</li>
-        <li>Modo paisagem corrigido: conteúdo não ultrapassa mais a tela, menu lateral compacto em telas baixas</li>
-        <li><b>2.5.0:</b> layout adaptativo a zoom/fonte, menu lateral, lista de compras alinhada</li>
-        <li><b>Layout adaptativo</b>: o app percebe zoom da tela e fonte ampliada e se reorganiza sozinho (cartões empilhados, botões que quebram linha, nada cortado)</li>
-        <li><b>Menu lateral</b> (☰) automático em telas muito ampliadas; opção "Menu de navegação" em Ajustes para escolher barra inferior, menu lateral ou coluna fixa</li>
-        <li>Lista de compras reorganizada: quantidades alinhadas em coluna e nomes que quebram linha corretamente</li>
-        <li><b>Versão Android (APK)</b>: compartilhar PDF, arquivo, texto e backup pela folha de compartilhar do celular; receber receitas por "Abrir com" e pelo compartilhar do WhatsApp</li>
-        <li>Respeita a barra de status e a barra de gestos do Android; a barra de status acompanha o tema</li>
-        <li>83 receitas do livro que estavam sem tempo de preparo agora têm tempo (melhora a Sugestão do momento e o PDF)</li>
-        <li>Mais ingredientes no banco (arroz japonês cozido, matcha, gochujang, azuki, wakame e outros): conversão de xícara/colher para gramas funciona neles</li>
-        <li>Mais segurança nos dados: backups e dados salvos são conferidos antes de usar, e o que estiver danificado é ignorado sem travar o app</li>
-        <li>Todas as frações (⅜, ⅝, ⅞…) são entendidas ao digitar; números absurdos ou infinitos são recusados</li>
-        <li>PDF: frações como ⅓ e símbolos especiais saem corretos em vez de “?”</li>
-        <li><b>Sugestão do momento</b> no Início: uma receita sorteada conforme a hora do dia, o dia da semana, feriados e a dificuldade</li>
-        <li>Mais de 260 receitas novas: culinária japonesa e do mundo, bolos, tortas, salgados, doces, sucos, sorvetes caseiros e lanches rápidos (livro com 464 receitas)</li>
-        <li>PDF mais limpo: espaço entre as seções e cabeçalho com a logo e o slogan do Dosari</li>
-        <li><b>Compartilhar em PDF</b> de verdade: o app gera o arquivo (com foto) para salvar ou enviar</li>
-        <li>Impressão corrigida (a pré-visualização não fica mais em branco)</li>
-        <li>Novo nome e identidade visual: <b>Dosari</b>, a dosagem certa para cada receita</li>
-        <li>Livro com receitas brasileiras (cuscuz nordestino, bolos, refrescos, drinks e mais)</li>
-        <li>Resumo no topo da receita, com tempo de preparo e chave para ajustar porções</li>
-        <li>Receitas organizadas em Todas, Favoritas, Clássicos, Criações e Recebidas</li>
-        <li>Compartilhar receita por arquivo, código ou texto, e PDF/impressão</li>
-        <li>Receber receitas e backups com reconhecimento automático</li>
-        <li>Ajuda no topo de Ajustes e atalho no Início; mais ícones</li>
-        <li>Correções de segurança e de integridade dos dados</li></ul></details>
-      <div><button class="btn danger" data-act="wipe" style="margin-top:12px">Apagar todos os dados</button></div>
+      <div id="about-news" style="margin-top:10px"></div>
+    </div>
     </div>
   </section>
 
@@ -619,7 +618,7 @@ const key = s=>norm(s).replace(/[-–]/g,' ').replace(/\s+/g,' ').trim();
 const icon = (id,cls='i')=>`<svg class="${cls}"><use href="#${id}"/></svg>`;
 const cap = s=>s.charAt(0).toUpperCase()+s.slice(1);
 
-const APP_VERSION='2.9.2';
+const APP_VERSION='2.11.0';
 const brandMark=(sz=40,uid='b')=>`<svg class="bm" viewBox="0 0 512 512" width="${sz}" height="${sz}" aria-hidden="true"><defs><linearGradient id="bg${uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3F8A5F"/><stop offset="1" stop-color="#2F6B4A"/></linearGradient><clipPath id="bc${uid}"><path d="M196,168 H266 A92,92 0 0 1 266,352 H196 Z"/></clipPath></defs><rect width="512" height="512" rx="116" fill="url(#bg${uid})"/><path d="M168,128 H268 A132,132 0 0 1 268,392 H168 Q152,392 152,376 V144 Q152,128 168,128 Z" fill="#FFF6E6"/><path d="M196,168 H266 A92,92 0 0 1 266,352 H196 Z" fill="#2F6B4A"/><g clip-path="url(#bc${uid})"><path d="M120,286 q32,-18 64,0 t64,0 t64,0 t64,0 V420 H120 Z" fill="#F28C3A"/></g><g stroke="#FFF6E6" stroke-width="10" stroke-linecap="round"><path d="M196,200 h38"/><path d="M196,240 h22"/><path d="M196,320 h22"/></g></svg>`;
 const SLOGAN='A dosagem certa para cada receita';
 
@@ -1302,6 +1301,7 @@ function sync(keep){
     const s=stack[i];
     if(s.t==='rdetail'||s.t==='redit'){ panel='p-rec'; view=s.t; rid=s.id; break; }
     if(s.t==='help'){ panel='p-help'; break; }
+    if(s.t==='ajs'){ panel='p-aj'; view=s.id; break; }
     if(s.t==='ldetail'){ panel='p-list'; view='ldetail'; rid=s.id; break; }
   }
   const k=panel+'|'+view+'|'+(rid||'');
@@ -1320,7 +1320,7 @@ function sync(keep){
     else if(panel==='p-rec'){ if(changed) renderRec(view,rid); }
     else if(panel==='p-itens'){ if(changed) renderItens(); }
     else if(panel==='p-list'){ if(changed) renderList(view,rid); }
-    else if(panel==='p-aj') renderAj();
+    else if(panel==='p-aj') renderAj(view);
     else if(panel==='p-help'){ if(changed) renderHelp(); }
     if(changed&&!keep) window.scrollTo(0,memo[k]||0);
     else if(keep) window.scrollTo(0,y);
@@ -1730,6 +1730,7 @@ function renderHome(){
   const p=data.profile||{nome:'',apelido:''}, now=new Date(), gr=greet(p,now);
   const dt=cap(now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}));
   let h=`<div class="brandbar">${brandMark(34,'hb')}<div><div class="bn">Dosari</div><div class="bs">${SLOGAN}</div></div></div><div class="hero">${icon(gr.ic,'deco')}<div class="date">${esc(dt)}</div><h1>${esc(gr.hi)}</h1><p>${esc(gr.sub)}</p></div>`;
+  h+=`<div id="tm-home-box">${tmHomeHtml()}</div>`;
   h+=`<button class="card hlp" data-act="help"><span class="lic">${icon('i-help','i sm')}</span><span class="tx"><span class="tt">Ajuda e dicas de uso</span><span class="ss">Aprenda cada função do app, passo a passo</span></span>${icon('i-chev','i sm')}</button>`;
   h+=sgCard();
   const favs=data.recipes.filter(r=>r.fav).sort((a,b)=>b.updated-a.updated);
@@ -1850,6 +1851,7 @@ function renderDetail(id){
       <button class="sw2" role="switch" aria-checked="${scaleOn[r.id]?'true':'false'}" data-act="scale-toggle" data-id="${esc(r.id)}"><span class="trk"></span><span class="yn">${scaleOn[r.id]?'Sim':'Não'}</span></button></div>
   </div>
   <button class="btn block" data-act="timer" data-id="${esc(r.id)}" style="margin-top:12px">${icon('i-timer','i sm')} Temporizador${r.time?' · '+esc(fmtTime(r.time)):''}</button>
+  <div id="tm-rec-box" data-rid="${esc(r.id)}">${tmRecHtml(r.id)}</div>
   <div id="scale-wrap">${scaleWrap(r)}</div>
   <h2>${icon('i-ruler','i sm')}Unidade de medida</h2>
   <div class="card"><select data-ch="viewunit" data-id="${esc(r.id)}" aria-label="Unidade de medida da receita">${viewUnitOptions(r.viewUnit)}</select>
@@ -2271,7 +2273,11 @@ function saveProfile(editing){
   persist('profile'); setSkipped(false); $('#onb').classList.remove('on'); $('#onb').innerHTML='';
   toast(editing?'Perfil atualizado':'Tudo pronto, '+ap+'!'); invalidate(); sync(); setTimeout(drainIncoming,400);
 }
-function renderAj(){
+function renderAj(view){
+  view=view||'list';
+  $('#aj-hub').style.display=view==='list'?'':'none';
+  $$('#p-aj .ajs').forEach(el=>{ el.style.display=el.dataset.ajs===view?'':'none'; });
+  { const n=$('#about-news'); if(n&&view==='sobre') n.innerHTML='<div class="nwl"><b style="color:var(--ink)">Novidades</b>'+newsHtml(NEWS,false)+'</div><button class="btn" data-act="news-show">Ver novidades em janela</button>'; }
   const p=data.profile;
   $('#prof-sum').textContent=p?(p.nome+(p.sobrenome?' '+p.sobrenome:'')):'Perfil não criado';
   { const b=document.querySelector('#p-aj [data-act=profile]'); if(b) b.textContent=p?'Editar perfil':'Criar perfil'; }
@@ -2279,6 +2285,33 @@ function renderAj(){
   $('#prof-sum2').textContent=p?('Chamado(a) de '+p.apelido+(a!=null?' · '+a+' anos':'')):'Crie quando quiser: tudo o que você já configurou será mantido.';
 }
 
+
+/* ================= novidades (agrupadas por versão maior; correções 2.x.y entram no grupo 2.x) ================= */
+const NEWS=[
+ {v:'2.11',t:['<b>Ajustes em submenus</b>: Perfil, Aparência, Temporizador, Tamanho das medidas, Backup e restauração, Ajuda e Sobre','<b>Janela de novidades</b> na primeira abertura após cada atualização']},
+ {v:'2.10',t:['<b>Temporizadores do Dosari</b>: vários ao mesmo tempo, na tela inicial e na receita, com atalho “Ver receita”','Acrescente tempo (+1, +5, +10 min), pause ou cancele; o aviso aparece em qualquer tela','Em Ajustes: toque, volume e vibração do alarme']},
+ {v:'2.9',t:['<b>Temporizador na receita</b>: use o tempo da receita, um tempo citado no preparo ou digite outro','Opção de abrir o app Relógio do celular (no Android)']},
+ {v:'2.8',t:['<b>Primeiro acesso</b>: restaurar backup ou criar perfil; dá para <b>pular o perfil</b> por enquanto sem perder nada do que você configurou','<b>182 receitas do livro</b> agora em camadas e etapas']},
+ {v:'2.7',t:['<b>Receitas em camadas</b> (Massa, Recheio, Cobertura…) e <b>preparo por etapas</b>, com nomes editáveis, reordenar, duplicar e remover','Lista de compras <b>agrupada</b> ou <b>por camadas</b>','Nova receita de exemplo: Bolo de Chocolate Dark Estruturado']},
+ {v:'2.6',t:['Botão <b>Nova</b> com menu: nova receita, importar e receber','Restaurar backup já na tela de boas-vindas','Muito mais saudações (fins de semana, feriados, aniversário)','Cor personalizada por <b>hexadecimal ou RGB</b>, com as 8 últimas salvas']},
+ {v:'2.5',t:['Layout adaptativo a zoom e fonte ampliada, menu lateral','Botão voltar do Android volta dentro do app; modo paisagem corrigido']}
+];
+const newsKey=()=>APP_VERSION.split('.').slice(0,2).join('.');
+const newsHtml=(list,open)=>list.map((g,i)=>`<details${open&&i===0?' open':''}><summary><b>Versão ${g.v}</b>${g.v===newsKey()?' · atual':''}</summary><ul>${g.t.map(x=>`<li>${x}</li>`).join('')}</ul></details>`).join('');
+function newsOpen(manual){
+  if(!manual) lsSet('mc_news',{seen:newsKey(),again:false});
+  openModal(`<h3>Novidades do Dosari</h3><p class="hint" style="margin:0">${manual?'Últimas versões':'Você atualizou para a versão '+esc(APP_VERSION)+'. Veja o que mudou:'}</p>
+  <div class="nwl" style="margin-top:8px">${newsHtml(NEWS.slice(0,6),true)}</div>
+  ${manual?'':`<label class="check" style="margin-top:12px"><input type="checkbox" id="nw-hide" data-ch="nwhide" checked><span>Não exibir novamente</span></label>`}
+  <button class="btn primary block" data-act="news-close" style="margin-top:12px">Entendi</button>`);
+}
+function newsBoot(){
+  let raw=null; try{ raw=localStorage.getItem('mc_news'); }catch(e){}
+  if(raw===null&&!data.profile&&!skippedOnb()){ lsSet('mc_news',{seen:newsKey(),again:false}); return; }
+  const st=lsGet('mc_news',{seen:'',again:false});
+  if(st.seen===newsKey()&&!st.again) return;
+  setTimeout(()=>{ if(document.querySelector('#onb.on')||stack.some(x=>x.t==='modal')) return; newsOpen(false); },1100);
+}
 /* ================= ajuda ================= */
 function renderHelp(){
   const S_=(ic,t,b)=>`<details><summary>${icon(ic)}${t}</summary><div class="body">${b}</div></details>`;
@@ -2295,7 +2328,8 @@ function renderHelp(){
   ${S_('i-share','Compartilhar receitas',`<p>Na receita, toque no ícone de <b>compartilhar</b> (topo). Opções:</p><ul><li><b>Para outro usuário do app:</b> envia um arquivo (com foto e itens personalizados). Quando a pessoa abrir esse arquivo em <b>Receber receita</b>, a receita fica salva no app dela.</li><li><b>Copiar código:</b> um texto curto que começa com <code>MC1:</code>. Cole no WhatsApp; quem receber usa <b>Receber receita → colar código</b> (o código não leva a foto).</li><li><b>Enviar como texto:</b> receita formatada para qualquer conversa.</li><li><b>PDF ou imprimir:</b> abre a impressão; escolha “Salvar como PDF” para gerar o arquivo.</li></ul><p>Para receber: botão de download ao lado de “Nova” em Receitas, ou em Ajustes → Receber receita. O app reconhece sozinho se o arquivo é uma <b>receita</b> (importa e abre) ou um <b>backup</b> (pergunta antes de substituir tudo). Na versão Android, basta tocar no arquivo ou compartilhar o código e escolher o Dosari.</p>`)}
   ${S_('i-cart','Listas de compras',`<ol><li>Abra a receita (já escalonada, se quiser) e toque em <b>Criar lista de compras</b>.</li><li>Escolha criar uma <b>nova lista</b> ou <b>adicionar a uma lista existente</b> (ótimo para juntar várias receitas), e como as quantidades aparecem: <b>como estão na receita</b> ou <b>para o mercado</b> (g/kg e ml/litros).</li><li>Ingredientes repetidos são somados automaticamente.</li></ol><p>Na aba <b>Compras</b>, abra uma lista e <b>toque em um item para marcá-lo</b> enquanto pega no mercado. Os itens vêm agrupados por tipo (farinhas, laticínios, legumes…) e os marcados ficam riscados e vão para o fim do grupo. A barra no topo mostra o progresso.</p><ul><li><b>Adicionar item:</b> inclua itens avulsos (papel toalha, por exemplo).</li><li><b>Compartilhar:</b> envia a lista como texto (WhatsApp, mensagens) ou copia para colar.</li><li><b>Desmarcar tudo / Remover marcados / Renomear / Excluir:</b> gerenciam a lista.</li><li>O <b>Início</b> mostra as 3 listas mais recentes.</li></ul>`)}
   ${S_('i-plus','Meus itens',`<p><b>Ingredientes:</b> a lista traz centenas de ingredientes. Toque em qualquer um para ajustar o peso de 1 xícara ao seu jeito de medir (aparece o selo “editado”, e dá para restaurar o padrão). Toque em <b>Novo</b> para cadastrar um ingrediente seu (selo “meu”).</p><p><b>Como medir:</b> encha uma xícara do ingrediente sem socar, pese em uma balança e digite o valor em gramas.</p><p><b>Unidades:</b> crie medidas próprias, como “caneca” ou “pote”, informando quantos ml ou g elas equivalem. Elas passam a valer no Conversor e nas receitas.</p>`)}
-  ${S_('i-sliders','Ajustes',`<ul><li><b>Ajuda:</b> fica no topo desta tela.</li><li><b>Perfil:</b> edite nome, apelido, sexo e aniversário.</li><li><b>Aparência:</b> tema automático, claro, escuro ou AMOLED (preto total); cor dos botões e destaques; tamanho do texto.</li><li><b>Tamanho das medidas:</b> defina quantos ml tem sua xícara, colheres e copo. Padrões: xícara 240 ml, colher de sopa 15 ml, colher de chá 5 ml, copo americano 190 ml.</li></ul>`)}
+  ${S_('i-timer','Temporizador',`<ol><li>Abra a receita e toque em <b>Temporizador</b>.</li><li>Escolha o tempo da receita, um tempo citado no preparo ou digite outro.</li><li>Os temporizadores ativos aparecem na <b>tela inicial</b> e na própria receita, com o nome da receita e o atalho <b>Ver receita</b>.</li><li>Ainda não ficou pronto? Toque em <b>+1 min</b>, <b>+5 min</b> ou <b>+10 min</b>, inclusive depois de o alarme tocar.</li></ol><p>Em <b>Ajustes → Temporizador</b> você muda o toque, o volume e a vibração. O alarme toca com o app aberto; a tela fica ligada enquanto houver temporizador ativo (dá para desligar).</p>`)}
+  ${S_('i-sliders','Ajustes',`<p>A tela de Ajustes é uma lista de submenus: toque em um para abrir e use a seta ou o gesto de voltar para retornar.</p><ul><li><b>Ajuda:</b> fica logo antes de Sobre.</li><li><b>Perfil:</b> edite nome, apelido, sexo e aniversário.</li><li><b>Aparência:</b> tema automático, claro, escuro ou AMOLED (preto total); cor dos botões e destaques; tamanho do texto.</li><li><b>Tamanho das medidas:</b> defina quantos ml tem sua xícara, colheres e copo. Padrões: xícara 240 ml, colher de sopa 15 ml, colher de chá 5 ml, copo americano 190 ml.</li></ul>`)}
   ${S_('i-db','Backup e importação',`<p>Os dados ficam só neste aparelho. Se limpar os dados do navegador ou trocar de celular, eles somem, então faça backup.</p><ul><li><b>Exportar backup:</b> gera um arquivo <code>.json</code> com tudo (perfil, receitas com fotos, itens próprios, ajustes). Guarde no Drive ou envie para você mesma.</li><li><b>Restaurar backup:</b> carrega um arquivo exportado e <b>substitui</b> os dados atuais.</li><li><b>Importar receitas:</b> <b>adiciona</b> receitas de um arquivo, sem apagar as existentes. Receitas repetidas são ignoradas.</li></ul><p>Formato simples para importar um livro de receitas:</p><pre>{ "recipes": [ {
   "title": "Bolo de cenoura",
   "categories": ["Bolos", "Lanches"],
@@ -2584,51 +2618,128 @@ function stepTimes(r){
     if(m[5]) min=30; else if(m[6]) min=90;
     else{ const unit=/^h/i.test(m[3])?60:1; const lo=parseFloat((m[1]||m[2]).replace(',','.')); min=lo*unit; if(m[0].match(/e\s*meia/i)&&unit===60) min+=30; else if(m[4]) min+=parseInt(m[4],10); }
     min=Math.round(min); if(!(min>0&&min<=1440)) continue;
-    const ctx=txt.slice(Math.max(0,m.index-34),m.index).replace(/^[\s\S]*[.!?;]\s+/,'').replace(/\s+/g,' ').replace(/^\d+[.)]\s*/,'').trim();
+    const st0=Math.max(0,m.index-60); let ctx=txt.slice(st0,m.index); if(st0>0&&/\S/.test(txt[st0-1])) ctx=ctx.replace(/^\S*\s/,''); ctx=ctx.replace(/^[\s\S]*[.!?;]\s+/,'').replace(/\s+/g,' ').replace(/^\d+[.)]\s*/,'').trim();
     const key=min+'|'+ctx; if(seen.has(key)) continue; seen.add(key);
-    out.push({min,lab:(ctx?'…'+ctx+' ':'')+lab}); if(out.length>=8) break;
+    out.push({min,lab:(ctx?'…'+ctx.charAt(0).toUpperCase()+ctx.slice(1)+' ':'')+lab}); if(out.length>=8) break;
   }
   return out;
 }
-function fmtClock(sec){ sec=Math.max(0,Math.round(sec)); const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60, z=n=>String(n).padStart(2,'0'); return (h?h+':'+z(m):m)+':'+z(s); }
-let appTimer=null, appTimerIv=null, timerErr='';
-function beep(){ try{ const A=window.AudioContext||window.webkitAudioContext, c=new A(); [0,.35,.7].forEach(t=>{ const o=c.createOscillator(), g=c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value=880; g.gain.value=.2; o.start(c.currentTime+t); o.stop(c.currentTime+t+.2); }); }catch(e){} try{ navigator.vibrate&&navigator.vibrate([300,150,300,150,300]); }catch(e){} }
-function tickAppTimer(){
-  const el=$('#tm-left'); if(!appTimer){ clearInterval(appTimerIv); return; }
-  const left=(appTimer.end-Date.now())/1000;
-  if(left<=0){ const l=appTimer.label; appTimer=null; clearInterval(appTimerIv); beep(); toast('Tempo esgotado: '+l); if(el){ el.textContent='00:00'; } return; }
-  if(el) el.textContent=fmtClock(left);
+function fmtClock(sec){ sec=Math.max(0,Math.round(sec)); const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60, z=n=>String(n).padStart(2,'0'); return h?h+':'+z(m)+':'+z(s):z(m)+':'+z(s); }
+
+/* ---- temporizadores internos: vários ao mesmo tempo, salvos no aparelho, com toque/volume/vibração ---- */
+const TMS_DEF={tone:'classic',vol:80,vib:'normal',wake:true,mode:'app'};
+const TONES=[['classic','Clássico'],['bell','Sino'],['digital','Digital'],['soft','Suave']];
+let TMS=Object.assign({},TMS_DEF,lsGet('mc_tmset',TMS_DEF));
+if(!TONES.some(t=>t[0]===TMS.tone)) TMS.tone='classic';
+{ const v=Number(TMS.vol); TMS.vol=Number.isFinite(v)?Math.max(0,Math.min(100,Math.round(v))):80; }
+if(!['off','normal','long'].includes(TMS.vib)) TMS.vib='normal';
+if(!['app','clock'].includes(TMS.mode)) TMS.mode='app';
+TMS.wake=TMS.wake!==false;
+const saveTms=()=>lsSet('mc_tmset',TMS);
+let timers=[];
+try{ const a=JSON.parse(localStorage.getItem('mc_timers')||'[]'); if(Array.isArray(a)) timers=a.filter(t=>t&&typeof t.id==='string'&&Number.isFinite(t.end)&&Number.isFinite(t.total)&&t.total>0&&['run','pause','done'].includes(t.state)).slice(0,20); }catch(e){}
+const tmSave=()=>{ try{ localStorage.setItem('mc_timers',JSON.stringify(timers)); }catch(e){} };
+const tmLeft=t=>t.state==='pause'?(t.left||0):t.state==='done'?0:(t.end-Date.now());
+let AC=null;
+function audioCtx(){ try{ const A=window.AudioContext||window.webkitAudioContext; if(!A) return null; if(!AC) AC=new A(); if(AC.state==='suspended') AC.resume(); return AC; }catch(e){ return null; } }
+function note(c,t,f,d,type,v){ const o=c.createOscillator(), g=c.createGain(); o.type=type; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.start(t); o.stop(t+d+.05); }
+function playTone(name,vol){
+  const c=audioCtx(); if(!c) return; const v=Math.pow((vol||0)/100,1.6)*.5; if(v<=0) return; const t=c.currentTime+.02;
+  if(name==='bell'){ [1,2.76,5.4].forEach((m,i)=>note(c,t,660*m,1.8/(i+1),'sine',v/(i+1))); }
+  else if(name==='digital'){ for(let i=0;i<4;i++) note(c,t+i*.16,1000,.09,'square',v*.5); }
+  else if(name==='soft'){ note(c,t,523,.5,'triangle',v); note(c,t+.35,659,.8,'triangle',v); }
+  else { for(let i=0;i<3;i++) note(c,t+i*.3,880,.18,'sine',v); }
 }
-function startAppTimer(sec,label){ appTimer={end:Date.now()+sec*1000,label}; clearInterval(appTimerIv); appTimerIv=setInterval(tickAppTimer,500); }
+function vibrate(){ if(TMS.vib==='off') return; try{ navigator.vibrate&&navigator.vibrate(TMS.vib==='long'?[700,250,700,250,700,250,700]:[300,150,300,150,300]); }catch(e){} }
+let ringIv=null, ringT0=0;
+function ringTick(){ if(!timers.some(t=>t.state==='done')||Date.now()-ringT0>90000){ ringStop(); return; } playTone(TMS.tone,TMS.vol); vibrate(); }
+function ringBegin(){ if(ringIv) return; ringT0=Date.now(); ringTick(); ringIv=setInterval(ringTick,3000); }
+function ringStop(){ clearInterval(ringIv); ringIv=null; try{ navigator.vibrate&&navigator.vibrate(0); }catch(e){} }
+let wl=null, wlBusy=false;
+async function tmWake(){
+  if(wlBusy) return; wlBusy=true;
+  try{ const need=TMS.wake&&timers.some(t=>t.state==='run')&&document.visibilityState==='visible';
+    if(need&&!wl&&navigator.wakeLock){ wl=await navigator.wakeLock.request('screen'); wl.addEventListener('release',()=>{ wl=null; }); }
+    else if(!need&&wl){ await wl.release(); wl=null; } }catch(e){ wl=null; }
+  wlBusy=false;
+}
+let tmIv=null;
+function tmTick(){
+  let changed=false;
+  timers.forEach(t=>{ if(t.state==='run'&&t.end-Date.now()<=0){ t.state='done'; t.left=0; changed=true; } });
+  if(changed){ tmSave(); ringBegin(); }
+  timers.forEach(t=>{ const L=Math.max(0,tmLeft(t)); const pc=Math.max(0,Math.min(100,100*L/t.total))+'%';
+    document.querySelectorAll('[data-tleft="'+t.id+'"]').forEach(e=>{ e.textContent=fmtClock(L/1000); });
+    document.querySelectorAll('[data-tbar="'+t.id+'"]').forEach(e=>{ e.style.width=pc; }); });
+  if(changed) tmRefresh();
+  if(!timers.some(t=>t.state==='run')){ clearInterval(tmIv); tmIv=null; tmWake(); }
+}
+function tmEnsure(){ if(!tmIv&&timers.some(t=>t.state==='run')) tmIv=setInterval(tmTick,500); }
+function tmCard(t,link){
+  const done=t.state==='done', paused=t.state==='pause', has=link&&t.rid&&recById(t.rid), L=Math.max(0,tmLeft(t));
+  const b=(a,txt,m,cls)=>`<button class="btn${cls?' '+cls:''}" data-act="${a}" data-id="${t.id}"${m?` data-m="${m}"`:''}>${txt}</button>`;
+  return `<div class="tmc${done?' done':''}"><div class="tmh"><div class="tml"><b>${esc(t.lab||'Temporizador')}</b><span>${esc(t.rt||'')}</span></div>${has?`<button class="link" data-act="open-recipe" data-id="${esc(t.rid)}">Ver receita</button>`:''}</div>
+  <div class="tmt" data-tleft="${t.id}">${fmtClock(L/1000)}</div><div class="tmb"><i data-tbar="${t.id}" style="width:${Math.max(0,Math.min(100,100*L/t.total))}%"></i></div>
+  ${done?'<div class="tmd">Tempo esgotado!</div>':paused?'<div class="tmd" style="color:var(--muted)">Pausado</div>':''}
+  <div class="tmx">${b('tm-add','+1 min',1)}${b('tm-add','+5 min',5)}${b('tm-add','+10 min',10)}${done?'':(paused?b('tm-resume','Continuar'):b('tm-pause','Pausar'))}${b('tm-del',done?'Parar alarme':'Cancelar','','danger')}</div></div>`;
+}
+const tmHomeHtml=()=>timers.length?`<div class="sec"><h2>${icon('i-timer','i sm')}Temporizadores</h2></div><div class="tmlist">${timers.map(t=>tmCard(t,true)).join('')}</div>`:'';
+const tmRecHtml=rid=>{ const l=timers.filter(t=>t.rid===rid); return l.length?`<div class="tmlist" style="margin-top:10px">${l.map(t=>tmCard(t,false)).join('')}</div>`:''; };
+function tmRefresh(){
+  const h=$('#tm-home-box'); if(h) h.innerHTML=tmHomeHtml();
+  const r=$('#tm-rec-box'); if(r) r.innerHTML=tmRecHtml(r.dataset.rid);
+  let a=$('#tm-alert'); if(!a){ a=document.createElement('div'); a.id='tm-alert'; document.body.appendChild(a); }
+  const d=timers.filter(t=>t.state==='done'); a.innerHTML=d.map(t=>tmCard(t,true)).join(''); a.classList.toggle('on',d.length>0);
+}
+function tmStart(r,min,lab){
+  const t={id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),rid:r?r.id:'',rt:r?r.title:'Dosari',lab:lab||'',end:Date.now()+min*60000,total:min*60000,state:'run',left:0};
+  timers.push(t); if(timers.length>20) timers.shift(); tmSave(); audioCtx(); tmEnsure(); tmWake(); tmRefresh();
+}
+function tmFind(id){ return timers.find(t=>t.id===id); }
+function tmAddTime(id,m){
+  const t=tmFind(id); if(!t) return; const ms=m*60000;
+  if(t.state==='done'){ t.state='run'; t.end=Date.now()+ms; t.total=ms; if(!timers.some(x=>x.state==='done')) ringStop(); }
+  else if(t.state==='pause'){ t.left=(t.left||0)+ms; t.total+=ms; }
+  else { t.end+=ms; t.total+=ms; }
+  tmSave(); tmEnsure(); tmWake(); tmRefresh(); toast('+'+m+' min adicionados');
+}
+function tmPause(id){ const t=tmFind(id); if(!t||t.state!=='run') return; t.left=Math.max(0,t.end-Date.now()); t.state='pause'; tmSave(); tmWake(); tmRefresh(); }
+function tmResume(id){ const t=tmFind(id); if(!t||t.state!=='pause') return; t.end=Date.now()+(t.left||0); t.state='run'; tmSave(); tmEnsure(); tmWake(); tmRefresh(); }
+function tmDel(id){ timers=timers.filter(t=>t.id!==id); if(!timers.some(x=>x.state==='done')) ringStop(); tmSave(); tmWake(); tmRefresh(); }
+function renderTmSet(){
+  $$('#tm-tone button').forEach(b=>b.classList.toggle('on',b.dataset.v===TMS.tone));
+  $$('#tm-vib button').forEach(b=>b.classList.toggle('on',b.dataset.v===TMS.vib));
+  $$('#tm-mode button').forEach(b=>b.classList.toggle('on',b.dataset.v===TMS.mode));
+  const v=$('#tm-vol'); if(v) v.value=TMS.vol; const vv=$('#tm-vol-v'); if(vv) vv.textContent=TMS.vol+'%';
+  const w=$('#tm-wake'); if(w) w.checked=TMS.wake;
+}
+function tmBoot(){ renderTmSet(); tmTick(); tmEnsure(); tmRefresh(); tmWake(); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'){ tmTick(); tmWake(); } }); }
 function timerOpen(sec,label){
   const N=window.DosariNative;
   if(N&&N.timer){ let r=''; try{ r=N.timer(sec,String(label||'Dosari')); }catch(e){ r='err:'+(e&&e.message||e); } if(r===true||r==='ok') return true; timerErr=String(r||'').replace(/^err:/,''); }
   return false;
 }
+let timerErr='';
 function timerModal(id){
   const r=recById(id); if(!r) return;
-  const native=!!(window.DosariNative&&window.DosariNative.timer);
+  const native=!!(window.DosariNative&&window.DosariNative.timer), clock=TMS.mode==='clock'&&native;
   const opts=[]; if(r.time) opts.push({min:r.time,lab:'Tempo de preparo da receita'}); stepTimes(r).forEach(x=>{ if(!opts.some(o=>o.min===x.min&&o.lab===x.lab)) opts.push(x); });
-  const chip=(o,i)=>`<button class="shopt" data-act="timer-go" data-id="${esc(r.id)}" data-min="${o.min}" data-lab="${esc(o.lab)}"><span class="lic">${icon('i-timer','i sm')}</span><span class="tx"><span class="tt">${esc(fmtTime(o.min))}</span><span class="ss">${esc(o.lab)}</span></span>${icon('i-chev','i sm')}</button>`;
+  const chip=o=>`<button class="shopt" data-act="timer-go" data-id="${esc(r.id)}" data-min="${o.min}" data-lab="${esc(o.lab)}"><span class="lic">${icon('i-timer','i sm')}</span><span class="tx"><span class="tt">${esc(fmtTime(o.min))}</span><span class="ss">${esc(o.lab)}</span></span>${icon('i-chev','i sm')}</button>`;
   openModal(`<h3>Temporizador</h3>
-  <p class="hint" style="margin:0">${native?'Abre o app Relógio do celular com o tempo já ajustado.':'Contagem regressiva dentro do Dosari (no app Android abre o Relógio do celular).'}</p>
+  <p class="hint" style="margin:0">${clock?'Abre o app Relógio do celular com o tempo já ajustado.':'O Dosari conta o tempo e toca o alarme ao terminar. Acompanhe e acrescente tempo na tela inicial ou aqui na receita.'}</p>
   <div id="tm-list" style="margin-top:10px">${opts.length?opts.map(chip).join(''):'<p class="hint">Esta receita não tem tempo informado. Digite abaixo.</p>'}</div>
   <div class="field" style="margin-top:12px"><label for="tm-custom">Outro tempo (minutos)</label><input id="tm-custom" type="text" inputmode="numeric" placeholder="Ex.: 20"></div>
   <button class="btn primary block" data-act="timer-custom" data-id="${esc(r.id)}" style="margin-top:10px">Iniciar</button>
-  <div id="tm-run"></div>
-  <p class="hint" id="tm-diag" style="margin:12px 0 0;font-size:.8em">Dosari ${APP_VERSION} · ${native?'ponte do Relógio: disponível':'ponte do Relógio: ausente (use o APK, não o HTML)'}</p>`);
-  if(appTimer) showTimerRun();
-}
-function showTimerRun(){
-  const b=$('#tm-run'); if(!b||!appTimer) return;
-  b.innerHTML=`<div class="card" style="margin-top:12px;text-align:center"><div class="hint" style="margin:0">${esc(appTimer.label)}</div><div id="tm-left" style="font-size:2.2rem;font-weight:700;margin:6px 0">${fmtClock((appTimer.end-Date.now())/1000)}</div><button class="btn" data-act="timer-stop">Parar</button></div>`;
+  <p class="hint" id="tm-diag" style="margin:12px 0 0;font-size:.8em">Dosari ${APP_VERSION} · toque, volume e vibração em Ajustes${native?' · Relógio do celular: disponível':''}</p>`);
 }
 function timerStart(r,min,label){
   min=Math.round(Number(min)); if(!(min>0&&min<=1440)){ toast('Informe um tempo entre 1 e 1440 minutos'); return; }
-  const lab=(r?r.title:'Dosari')+(label&&label!=='Tempo de preparo da receita'?' — '+label:'');
-  if(timerOpen(min*60,r?r.title:'Dosari')){ return; }
-  if(window.DosariNative&&window.DosariNative.timer){ const dg=$('#tm-diag'); if(dg){ dg.style.color='var(--danger,#b3261e)'; dg.textContent='Falha ao abrir o Relógio: '+(timerErr||'sem detalhe'); } toast('Não consegui abrir o Relógio'+(timerErr?': '+timerErr:'')+'. Usando o temporizador do Dosari.'); timerErr=''; }
-  startAppTimer(min*60,lab); showTimerRun(); try{ if('Notification' in window&&Notification.permission==='default') Notification.requestPermission(); }catch(e){}
+  let lab=String(label||'').replace(/^…/,'').trim(); if(lab==='Tempo de preparo da receita') lab='Tempo de preparo';
+  if(TMS.mode==='clock'&&window.DosariNative&&window.DosariNative.timer){
+    if(timerOpen(min*60,r?r.title:'Dosari')){ closeTop(); return; }
+    toast('Não consegui abrir o Relógio'+(timerErr?': '+timerErr:'')+'. Usando o temporizador do Dosari.'); timerErr='';
+  }
+  tmStart(r,min,lab); closeTop(()=>toast('Temporizador iniciado: '+fmtTime(min)));
 }
 function shareModal(id){
   const r=recById(id); if(!r) return;
@@ -2743,7 +2854,15 @@ const ACT={
   'timer':el=>timerModal(el.dataset.id),
   'timer-go':el=>timerStart(recById(el.dataset.id),el.dataset.min,el.dataset.lab),
   'timer-custom':el=>{ const v=String(($('#tm-custom')||{}).value||'').trim(); const m=parseTime(v); timerStart(recById(el.dataset.id),m,''); },
-  'timer-stop':()=>{ appTimer=null; clearInterval(appTimerIv); const b=$('#tm-run'); if(b) b.innerHTML=''; toast('Temporizador parado'); },
+  'aj-open':el=>openItem({t:'ajs',id:el.dataset.id}),
+  'news-close':()=>closeTop(),
+  'news-show':()=>newsOpen(true),
+  'tm-add':el=>tmAddTime(el.dataset.id,Number(el.dataset.m)),
+  'tm-pause':el=>tmPause(el.dataset.id), 'tm-resume':el=>tmResume(el.dataset.id), 'tm-del':el=>tmDel(el.dataset.id),
+  'tm-tone':el=>{ TMS.tone=el.dataset.v; saveTms(); renderTmSet(); playTone(TMS.tone,TMS.vol); },
+  'tm-vib':el=>{ TMS.vib=el.dataset.v; saveTms(); renderTmSet(); vibrate(); },
+  'tm-mode':el=>{ TMS.mode=el.dataset.v; saveTms(); renderTmSet(); },
+  'tm-test':()=>{ audioCtx(); playTone(TMS.tone,TMS.vol); vibrate(); },
   receive:()=>receiveModal(),
   'new-menu':()=>newMenuModal(),
   'nm-new':()=>closeTop(()=>ACT['new-recipe']()),
@@ -2764,6 +2883,7 @@ document.addEventListener('click',e=>{ const el=e.target.closest('[data-act]'); 
 document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.rc[data-act],.lc[data-act],.srow[data-act]')){ e.preventDefault(); e.target.click(); } });
 let pasteG=null;
 const INPUT={
+  tmvol:t=>{ TMS.vol=Math.max(0,Math.min(100,Math.round(Number(t.value)||0))); saveTms(); const vv=$('#tm-vol-v'); if(vv) vv.textContent=TMS.vol+'%'; },
   gname:t=>{ const g=draft.groups.find(x=>x.id===t.dataset.g); if(g){ g.name=t.value; editDirty=true; } },
   ptitle:t=>{ const p=draft.phases.find(x=>x.id===t.dataset.p); if(p){ p.title=t.value; editDirty=true; } },
   pstep:t=>{ const p=draft.phases.find(x=>x.id===t.dataset.p); if(p){ p.steps[+t.dataset.s]=t.value; editDirty=true; } },
@@ -2776,6 +2896,9 @@ const INPUT={
   dl:t=>{ const i=+t.dataset.i, k=t.dataset.k; draft.ing[i][k]=t.value; editDirty=true; if(k==='name'){ const h=$('#nh-'+i); if(h) h.textContent=nameHint(draft.ing[i]); } }
 };
 const CHG={
+  nwhide:t=>{ lsSet('mc_news',{seen:newsKey(),again:!t.checked}); },
+  tmvol:()=>{ audioCtx(); playTone(TMS.tone,TMS.vol); },
+  tmwake:t=>{ TMS.wake=t.checked; saveTms(); tmWake(); },
   pp:t=>{ const r=recById(t.dataset.id); if(!r) return; const n=parseQty(t.value); if(!r.portions||isNaN(n)||n<=0){ toast('Informe um número de porções'); updateScale(r); return; } setScale(r,n/r.portions); },
   sfactor:t=>{ const r=recById(t.dataset.id); if(!r) return; const n=parseQty(t.value); if(isNaN(n)||n<=0){ toast('Informe um multiplicador, como 1,5'); return; } setScale(r,n); },
   mldest:t=>{ const n=$('#ml-name'); if(n) n.disabled=t.value!=='new'; },
@@ -2842,6 +2965,7 @@ loadData(()=>{
   $('#qty').value=ST.qty; fillSettings(); applyTheme(); { const v=$('#app-ver'); if(v) v.textContent='v'+APP_VERSION; const ab=$('#about-brand'); if(ab) ab.innerHTML=brandMark(44,'ab')+'<div><div class="bn">Dosari</div><div class="bs">'+SLOGAN+'</div></div>'; }
   history.replaceState({d:0},'');
   if(!data.profile){ if(skippedOnb()) setTimeout(promptProfile,700); else showWelcome('ask'); }
+  tmBoot(); newsBoot();
   sync();
   mcReady=true; setTimeout(drainIncoming,50);
 });
