@@ -3,6 +3,7 @@ package br.com.dosari.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.webkit.JavascriptInterface;
 import androidx.activity.OnBackPressedCallback;
 import com.getcapacitor.BridgeActivity;
@@ -25,6 +26,54 @@ public class MainActivity extends BridgeActivity {
         public String take() {
             synchronized (pending) { return pending.isEmpty() ? "" : pending.remove(0); }
         }
+
+        /** Abre o app Relógio do celular com um temporizador já ajustado. Retorna "ok" ou "err:motivo". */
+        @JavascriptInterface
+        public String timer(int seconds, String label) {
+            final int len = Math.max(1, Math.min(seconds, 86400));
+            final String msg = label == null ? "Dosari" : label;
+            final String[] res = { "err:sem resposta" };
+            final java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
+            runOnUiThread(() -> {
+                try {
+                    res[0] = launchTimer(len, msg);
+                } finally {
+                    done.countDown();
+                }
+            });
+            try { done.await(3, java.util.concurrent.TimeUnit.SECONDS); } catch (InterruptedException ignored) { }
+            return res[0];
+        }
+    }
+
+    private Intent timerIntent(int len, String msg) {
+        return new Intent(AlarmClock.ACTION_SET_TIMER)
+            .putExtra(AlarmClock.EXTRA_LENGTH, len)
+            .putExtra(AlarmClock.EXTRA_MESSAGE, msg)
+            .putExtra(AlarmClock.EXTRA_SKIP_UI, false);
+    }
+
+    /** Tenta o relógio padrão, depois os relógios conhecidos (Samsung, Google), sem depender de resolveActivity. */
+    private String launchTimer(int len, String msg) {
+        String[] pkgs = { null, "com.sec.android.app.clockpackage", "com.google.android.deskclock", "com.android.deskclock" };
+        String last = "nenhum app de relógio respondeu";
+        for (String pkg : pkgs) {
+            try {
+                Intent i = timerIntent(len, msg);
+                if (pkg != null) i.setPackage(pkg);
+                startActivity(i);
+                return "ok";
+            } catch (SecurityException e) {
+                last = "permissão negada (" + e.getMessage() + ")";
+            } catch (Exception e) {
+                last = e.getClass().getSimpleName() + (pkg != null ? " em " + pkg : "");
+            }
+        }
+        try {
+            startActivity(new Intent(AlarmClock.ACTION_SHOW_TIMERS));
+            return "err:abri o Relógio, mas sem tempo ajustado (" + last + ")";
+        } catch (Exception ignored) { }
+        return "err:" + last;
     }
 
     @Override
