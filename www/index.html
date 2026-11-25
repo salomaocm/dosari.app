@@ -377,6 +377,7 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
 #tm-alert.on{display:grid}#tm-alert .tmc{box-shadow:0 8px 28px rgba(0,0,0,.35)}
 .ajs>h2{display:none}
 .nwl details{border-top:1px solid var(--line);padding:8px 0}.nwl summary{cursor:pointer}.nwl ul{margin:6px 0 0;padding-left:18px}.nwl li{margin:3px 0}
+.prow{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-top:1px solid var(--line)}.prow:first-child{border-top:0;padding-top:0}.prow span{color:var(--muted)}.prow b{text-align:right;overflow-wrap:anywhere;font-weight:600}
 </style>
 </head>
 <body>
@@ -489,9 +490,7 @@ h1,h2,.rtitle{ overflow-wrap:anywhere; }
     <div class="top"><button class="ib" data-act="back" aria-label="Voltar"><svg class="i"><use href="#i-back"/></svg></button><div class="sp"></div></div><h1><svg class="i hi"><use href="#i-user"/></svg>Perfil</h1>
     <h2><svg class="i sm"><use href="#i-user"/></svg>Perfil</h2>
     <div class="card">
-      <div id="prof-sum" style="font-weight:600"></div>
-      <div class="hint" id="prof-sum2"></div>
-      <button class="btn" data-act="profile">Editar perfil</button>
+      <div id="prof-box"></div>
     </div>
     </div>
     <div class="ajs" data-ajs="aparencia" style="display:none">
@@ -618,7 +617,7 @@ const key = s=>norm(s).replace(/[-–]/g,' ').replace(/\s+/g,' ').trim();
 const icon = (id,cls='i')=>`<svg class="${cls}"><use href="#${id}"/></svg>`;
 const cap = s=>s.charAt(0).toUpperCase()+s.slice(1);
 
-const APP_VERSION='2.11.0';
+const APP_VERSION='2.11.1';
 const brandMark=(sz=40,uid='b')=>`<svg class="bm" viewBox="0 0 512 512" width="${sz}" height="${sz}" aria-hidden="true"><defs><linearGradient id="bg${uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3F8A5F"/><stop offset="1" stop-color="#2F6B4A"/></linearGradient><clipPath id="bc${uid}"><path d="M196,168 H266 A92,92 0 0 1 266,352 H196 Z"/></clipPath></defs><rect width="512" height="512" rx="116" fill="url(#bg${uid})"/><path d="M168,128 H268 A132,132 0 0 1 268,392 H168 Q152,392 152,376 V144 Q152,128 168,128 Z" fill="#FFF6E6"/><path d="M196,168 H266 A92,92 0 0 1 266,352 H196 Z" fill="#2F6B4A"/><g clip-path="url(#bc${uid})"><path d="M120,286 q32,-18 64,0 t64,0 t64,0 t64,0 V420 H120 Z" fill="#F28C3A"/></g><g stroke="#FFF6E6" stroke-width="10" stroke-linecap="round"><path d="M196,200 h38"/><path d="M196,240 h22"/><path d="M196,320 h22"/></g></svg>`;
 const SLOGAN='A dosagem certa para cada receita';
 
@@ -2273,22 +2272,45 @@ function saveProfile(editing){
   persist('profile'); setSkipped(false); $('#onb').classList.remove('on'); $('#onb').innerHTML='';
   toast(editing?'Perfil atualizado':'Tudo pronto, '+ap+'!'); invalidate(); sync(); setTimeout(drainIncoming,400);
 }
+let profEdit=false, peSexo='n';
+function renderProfBox(){
+  const b=$('#prof-box'); if(!b) return; const p=data.profile;
+  if(!p){ b.innerHTML=`<div id="prof-sum" style="font-weight:600">Perfil não criado</div><div class="hint" id="prof-sum2">Crie quando quiser: tudo o que você já configurou será mantido.</div><button class="btn primary" data-act="profile">Criar perfil</button>`; return; }
+  if(!profEdit){
+    const sx={f:'Feminino',m:'Masculino',n:'Prefiro não dizer'}[p.sexo]||'Prefiro não dizer', a=ageOf(p.nasc);
+    let nasc='Não informado'; if(p.nasc){ const q=String(p.nasc).split('-'); if(q.length===3) nasc=q[2]+'/'+q[1]+'/'+q[0]+(a!=null?' · '+a+' anos':''); }
+    const row=(k,v,id)=>`<div class="prow"><span>${k}</span><b${id?` id="${id}"`:''}>${esc(v)}</b></div>`;
+    b.innerHTML=row('Nome',p.nome+(p.sobrenome?' '+p.sobrenome:''),'prof-sum')+row('Chamado(a) de',p.apelido||p.nome)+row('Sexo',sx)+row('Aniversário',nasc)+`<button class="btn" data-act="prof-edit">Editar perfil</button>`;
+  } else {
+    const sb=(v,t)=>`<button type="button" class="${peSexo===v?'on':''}" data-act="pe-sexo" data-v="${v}">${t}</button>`;
+    b.innerHTML=`<div class="field"><label for="pe-nome">Nome *</label><input id="pe-nome" type="text" value="${esc(p.nome||'')}" autocomplete="given-name"></div>
+    <div class="field"><label for="pe-sobre">Sobrenome</label><input id="pe-sobre" type="text" value="${esc(p.sobrenome||'')}" autocomplete="family-name"></div>
+    <div class="field"><label for="pe-ap">Como gosta de ser chamado(a)?</label><input id="pe-ap" type="text" value="${esc(p.apelido||'')}" placeholder="Apelido" autocomplete="nickname"></div>
+    <div class="field"><span class="lbl">Sexo</span><div class="seg c3" id="pe-sexo">${sb('f','Feminino')}${sb('m','Masculino')}${sb('n','Prefiro não dizer')}</div></div>
+    <div class="field"><label for="pe-nasc">Data de aniversário</label><input id="pe-nasc" type="date" value="${esc(p.nasc||'')}" max="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="btns"><button class="btn primary" data-act="prof-save">Salvar</button><button class="btn" data-act="prof-cancel">Cancelar</button></div>`;
+  }
+}
+function profSave(){
+  const nome=$('#pe-nome').value.trim(); if(!nome){ toast('Informe seu nome'); $('#pe-nome').focus(); return; }
+  const ap=$('#pe-ap').value.trim()||nome.split(/\s+/)[0];
+  data.profile={nome,sobrenome:$('#pe-sobre').value.trim(),apelido:ap,sexo:peSexo||'n',nasc:$('#pe-nasc').value||''};
+  persist('profile'); profEdit=false; renderProfBox(); invalidate(); toast('Perfil atualizado');
+}
 function renderAj(view){
   view=view||'list';
   $('#aj-hub').style.display=view==='list'?'':'none';
   $$('#p-aj .ajs').forEach(el=>{ el.style.display=el.dataset.ajs===view?'':'none'; });
   { const n=$('#about-news'); if(n&&view==='sobre') n.innerHTML='<div class="nwl"><b style="color:var(--ink)">Novidades</b>'+newsHtml(NEWS,false)+'</div><button class="btn" data-act="news-show">Ver novidades em janela</button>'; }
   const p=data.profile;
-  $('#prof-sum').textContent=p?(p.nome+(p.sobrenome?' '+p.sobrenome:'')):'Perfil não criado';
-  { const b=document.querySelector('#p-aj [data-act=profile]'); if(b) b.textContent=p?'Editar perfil':'Criar perfil'; }
-  const a=p&&ageOf(p.nasc);
-  $('#prof-sum2').textContent=p?('Chamado(a) de '+p.apelido+(a!=null?' · '+a+' anos':'')):'Crie quando quiser: tudo o que você já configurou será mantido.';
+  if(view!=='perfil') profEdit=false;
+  renderProfBox();
 }
 
 
 /* ================= novidades (agrupadas por versão maior; correções 2.x.y entram no grupo 2.x) ================= */
 const NEWS=[
- {v:'2.11',t:['<b>Ajustes em submenus</b>: Perfil, Aparência, Temporizador, Tamanho das medidas, Backup e restauração, Ajuda e Sobre','<b>Janela de novidades</b> na primeira abertura após cada atualização']},
+ {v:'2.11',t:['<b>Ajustes em submenus</b>: Perfil, Aparência, Temporizador, Tamanho das medidas, Backup e restauração, Ajuda e Sobre','<b>Janela de novidades</b> na primeira abertura após cada atualização','Perfil mostra seus dados direto e permite editar na própria tela']},
  {v:'2.10',t:['<b>Temporizadores do Dosari</b>: vários ao mesmo tempo, na tela inicial e na receita, com atalho “Ver receita”','Acrescente tempo (+1, +5, +10 min), pause ou cancele; o aviso aparece em qualquer tela','Em Ajustes: toque, volume e vibração do alarme']},
  {v:'2.9',t:['<b>Temporizador na receita</b>: use o tempo da receita, um tempo citado no preparo ou digite outro','Opção de abrir o app Relógio do celular (no Android)']},
  {v:'2.8',t:['<b>Primeiro acesso</b>: restaurar backup ou criar perfil; dá para <b>pular o perfil</b> por enquanto sem perder nada do que você configurou','<b>182 receitas do livro</b> agora em camadas e etapas']},
@@ -2848,6 +2870,10 @@ const ACT={
   'onb-new':()=>showProfileForm(false,true), 'onb-old':()=>showWelcome('old'), 'onb-back':()=>showWelcome('ask'), 'onb-newprof':()=>showProfileForm(false,false),
   'skip-profile':()=>{ setSkipped(true); $('#onb').classList.remove('on'); $('#onb').innerHTML=''; toast('Tudo bem! Crie seu perfil quando quiser, em Ajustes.'); invalidate(); sync(); setTimeout(drainIncoming,400); },
   'prof-later-yes':()=>closeTop(()=>showProfileForm(false,true)), 'close-profile':()=>{ $('#onb').classList.remove('on'); $('#onb').innerHTML=''; },
+  'prof-edit':()=>{ profEdit=true; peSexo=(data.profile&&data.profile.sexo)||'n'; renderProfBox(); const i=$('#pe-nome'); if(i) i.focus(); },
+  'prof-cancel':()=>{ profEdit=false; renderProfBox(); },
+  'prof-save':()=>profSave(),
+  'pe-sexo':el=>{ peSexo=el.dataset.v; $$('#pe-sexo button').forEach(b=>b.classList.toggle('on',b.dataset.v===peSexo)); },
   'pick-sexo':el=>{ profDraft.sexo=el.dataset.v; $$('#pf-sexo button').forEach(b=>b.classList.toggle('on',b.dataset.v===profDraft.sexo)); },
   'save-profile':el=>saveProfile(el.dataset.edit==='1'),
   'share-recipe':el=>shareModal(el.dataset.id),
