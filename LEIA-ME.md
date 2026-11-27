@@ -1,6 +1,6 @@
 # Dosari — como gerar o APK
 
-Este é o projeto Android do Dosari (versão 2.4.0). O APK não foi gerado aqui porque o ambiente
+Este é o projeto Android do Dosari (versão 2.15.3). O APK não foi gerado aqui porque o ambiente
 onde o projeto foi montado não consegue baixar o Android SDK. O projeto está pronto: basta uma
 das duas opções abaixo.
 
@@ -47,3 +47,26 @@ assinatura própria e secreta (não a deste projeto). Se quiser, peça e eu prep
 - Pacote: `br.com.dosari.app` · Capacitor 8 · Java 21 · minSdk 24 (Android 7+) · targetSdk 36.
 - Este projeto **não foi compilado nem testado em aparelho** pelo ambiente que o criou. Se o primeiro build falhar,
   copie a mensagem de erro do passo que ficou vermelho e envie para ajustar.
+
+## Segurança (2.12.3)
+- Mantenha o repositório do GitHub **privado**: o arquivo `dosari.keystore` e a senha padrão estão nele. Quem tiver a chave pode publicar "atualizações" falsas do app.
+- Para mais proteção, defina os Secrets `DOSARI_KEYSTORE_PASSWORD` e `DOSARI_KEY_PASSWORD` no GitHub (o build usa a senha padrão se não existirem) e troque a senha do keystore.
+
+## Proteger a chave de assinatura (recomendado)
+A chave `android/app/dosari.keystore` é a identidade do app: quem a tiver pode assinar atualizações como se fossem suas.
+Hoje ela vem dentro do projeto (e a senha padrão está no `build.gradle`) para que o APK seja gerado sem configuração.
+Por isso: **mantenha o repositório privado** e guarde uma cópia da chave fora do GitHub.
+Para tirar a chave do repositório sem trocar a identidade do app (as atualizações continuam instalando por cima):
+1. No computador: `base64 -w0 android/app/dosari.keystore` (no Mac: `base64 -i android/app/dosari.keystore`) e copie o resultado.
+2. No GitHub: **Settings → Secrets and variables → Actions → New repository secret** e crie:
+   `DOSARI_KEYSTORE_B64` (o texto copiado), `DOSARI_KEYSTORE_PASSWORD` e `DOSARI_KEY_PASSWORD` (a senha da chave).
+3. O workflow passa a usar os Secrets automaticamente. Depois disso troque a senha da chave
+   (`keytool -storepasswd` e `keytool -keypasswd`), atualize os Secrets e apague `dosari.keystore` e as senhas do repositório.
+   Só apague do histórico do Git depois de ter a cópia da chave guardada em segurança.
+**Não gere uma chave nova** se o app já está instalado: a atualização não instalaria por cima.
+
+## Como o app guarda os dados
+Os dados ficam no aparelho (IndexedDB, com cópia de contingência em localStorage). Importar receitas e restaurar backup são
+operações "tudo ou nada": se a gravação falhar, os dados anteriores continuam como estavam. Faça backups com frequência em
+Ajustes › Backup e restauração. O alarme dos temporizadores do app só toca com o app aberto; para avisar com o app fechado
+use o atalho do relógio do celular.

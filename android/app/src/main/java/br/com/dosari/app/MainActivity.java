@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class MainActivity extends BridgeActivity {
     private static final int MAX_BYTES = 20 * 1024 * 1024;
+    private static final int MAX_PENDING = 5;                 // no máximo 5 conteúdos aguardando
+    private static final int MAX_PENDING_CHARS = 30 * 1024 * 1024; // e ~30 MB no total
     private final List<String> pending = new ArrayList<>();
 
     /** Ponte exposta ao JavaScript (classe pública e nomeada, exigida pelo WebView). */
@@ -31,7 +33,7 @@ public class MainActivity extends BridgeActivity {
         @JavascriptInterface
         public String timer(int seconds, String label) {
             final int len = Math.max(1, Math.min(seconds, 86400));
-            final String msg = label == null ? "Dosari" : label;
+            final String msg = label == null ? "Dosari" : (label.length() > 100 ? label.substring(0, 100) : label);
             final String[] res = { "err:sem resposta" };
             final java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
             runOnUiThread(() -> {
@@ -122,12 +124,20 @@ public class MainActivity extends BridgeActivity {
             }
         } catch (Exception ignored) { }
         if (text == null || text.trim().isEmpty()) return false;
-        synchronized (pending) { pending.add(text); }
+        if (text.length() > MAX_BYTES) return false;
+        synchronized (pending) {
+            long total = text.length();
+            for (String p : pending) total += p.length();
+            if (pending.size() >= MAX_PENDING || total > MAX_PENDING_CHARS) return false; // fila cheia: ignora o novo
+            pending.add(text);
+        }
         intent.setAction(null); // evita reprocessar ao girar a tela
         return true;
     }
 
     private String readUri(Uri uri) throws Exception {
+        // só aceita conteúdo entregue pelo Android (content://); file:// poderia apontar para arquivos privados do próprio app
+        if (uri == null || !"content".equals(uri.getScheme())) return null;
         try (InputStream in = getContentResolver().openInputStream(uri)) {
             if (in == null) return null;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
